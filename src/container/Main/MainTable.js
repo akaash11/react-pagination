@@ -9,6 +9,8 @@ const MainTable = () =>{
     const [currentPage,setCurrentPage] = useState();
     const [itemsPerPage,setItemsPerPage]= useState(100);
     const [ search, setSearch] = useState("");
+    const [sorting, setSorting ] = useState({ field:"", order:""})
+
     const headers = [
       { name: "No#", field: "id", sortable: false },
       { name: "Name", field: "name", sortable: true },
@@ -44,15 +46,23 @@ const MainTable = () =>{
 
         setTotalItems(computeData.length);
 
+        //sorting
+        if(sorting.field){
+            const reversed = sorting.order === "asc" ? 1 : -1;
+            computeData = computeData.sort((a,b) => 
+                    reversed * a[sorting.field].localeCompare(b[sorting.field])
+                );
+        }
+        
+        //current page slice
         return computeData.slice(
             (currentPage - 1) * itemsPerPage,
             (currentPage - 1) * itemsPerPage + itemsPerPage
         );
-    },[data, currentPage, itemsPerPage, search])
+    },[data, currentPage, itemsPerPage, search, sorting])
 
     return(
         <>
-            <p>Main Table pagination</p>
             <div className="row w-100">
                 <div className="col mb-3 col-12 text-center">
                     <div className="row">
@@ -74,7 +84,11 @@ const MainTable = () =>{
                         </div>
                     </div>
                     <table className="table table-striped">            
-                        <TableHeader headers={headers} />
+                        <TableHeader 
+                            headers={headers} 
+                            onSorting={(field, order)=>{
+                                setSorting({field , order})
+                            }}/>
                         <tbody>
                             {apiData.map(data =>(
                                 <tr>
