@@ -2,14 +2,17 @@ import React, { useState, useEffect, useMemo }  from 'react'
 import Pagination from '../../components/Pagination/Pagination'
 import TableHeader from '../../components/Header/Header'
 import Search from '../../components/Search/Search'
+import useFullPageLoader from '../../hook/useFullPageLoader'
 
 const MainTable = () =>{
     const [data,setData]=useState([]);
     const [totalItems, setTotalItems] = useState(0);
     const [currentPage,setCurrentPage] = useState();
-    const [itemsPerPage,setItemsPerPage]= useState(100);
+    //const [itemsPerPage,setItemsPerPage]= useState(100);
+    const itemsPerPage = 100;
     const [ search, setSearch] = useState("");
     const [sorting, setSorting ] = useState({ field:"", order:""})
+    const [loader, showLoader, hideLoader] = useFullPageLoader();
 
     const headers = [
       { name: "No#", field: "id", sortable: false },
@@ -19,12 +22,14 @@ const MainTable = () =>{
     ];
     
     useEffect(()=>{
+        showLoader();
         const getData = () => {
             fetch('https://jsonplaceholder.typicode.com/comments')
               .then(response => response.json())
               .then(json => {
-                console.log(json)
-                setData(json)
+                hideLoader();
+                setData(json);
+                console.log(json);
               })
         }  
         getData();
@@ -58,7 +63,7 @@ const MainTable = () =>{
             (currentPage - 1) * itemsPerPage,
             (currentPage - 1) * itemsPerPage + itemsPerPage
         );
-    },[data, currentPage, itemsPerPage, search, sorting])
+    },[data, currentPage, search, sorting])
 
     return(
         <>
@@ -101,6 +106,7 @@ const MainTable = () =>{
                     </table>
                 </div>
             </div>
+            {loader}
         </>    
     );
 };
