@@ -14,7 +14,7 @@ const Header = ({headers, onSorting})=>{
     }
 
     return (
-        <thread>
+        <thead>
             <tr>
                 {headers.map(({ name, field, sortable }) => (
                     <th key={name}
@@ -28,7 +28,7 @@ const Header = ({headers, onSorting})=>{
                     </th>
                 ))}
             </tr>
-        </thread>
+        </thead>
     );
 };
 export default Header;

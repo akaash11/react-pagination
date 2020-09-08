@@ -4,7 +4,7 @@ import MainTable from "./container/Main/MainTable"
 function App() {
 
   return (
-    <div>
+    <div className="Main">
       <MainTable />
     </div>
   );

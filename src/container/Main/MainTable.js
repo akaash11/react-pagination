@@ -19,17 +19,16 @@ const MainTable = () =>{
     ];
     
     useEffect(()=>{
-      getData();
+        const getData = () => {
+            fetch('https://jsonplaceholder.typicode.com/comments')
+              .then(response => response.json())
+              .then(json => {
+                console.log(json)
+                setData(json)
+              })
+        }  
+        getData();
     },[])
-  
-    const getData = () => {
-      fetch('https://jsonplaceholder.typicode.com/comments')
-        .then(response => response.json())
-        .then(json => {
-          console.log(json)
-          setData(json)
-        })
-    }
 
     //useMeme advantage only when dependency changes it will be called
     //otherwise it will give the cached version of the function
